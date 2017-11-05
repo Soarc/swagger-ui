@@ -114,7 +114,7 @@ export const authorizeTempPassword = ( auth ) => ( {fn, authActions } ) => {
   let headers = {}
 
   fn.fetch({
-    url: identityUrl+"Account/RequestTempraryPassword?phoneNumber="+phoneNumber,
+    url: identityUrl+"Account/RequestTempraryPassword?phoneNumber="+phoneNumber+"&clientId="+schema.get('clientId'),
     method: "get"
   })
   .then(function (response) {
