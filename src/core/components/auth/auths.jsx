@@ -26,7 +26,6 @@ export default class Auths extends React.Component {
   submitAuth =(e) => {
     e.preventDefault()
     let { authActions } = this.props
-
     authActions.authorize(this.state)
   }
 
@@ -43,9 +42,7 @@ export default class Auths extends React.Component {
 
   render() {
     let { definitions, getComponent, authSelectors, errSelectors } = this.props
-    const ApiKeyAuth = getComponent("apiKeyAuth")
-    const TempPassAuth = getComponent("tempPassAuth")
-    const BasicAuth = getComponent("basicAuth")
+    const AuthItem = getComponent("AuthItem")
     const Oauth2 = getComponent("oauth2", true)
     const TempPassword = getComponent("tempPassword", true)
     const ResourceOwner = getComponent("resourceOwner", true)
@@ -67,34 +64,16 @@ export default class Auths extends React.Component {
         {
           !!nonOauthDefinitions.size && <form onSubmit={ this.submitAuth }>
             {
-              nonOauthDefinitions.map( (schema, name) => {
-                let type = schema.get("type")
-                let authEl
-
-                switch(type) {
-                  case "apiKey": authEl = <ApiKeyAuth key={ name }
-                                                    schema={ schema }
-                                                    name={ name }
-                                                    errSelectors={ errSelectors }
-                                                    authorized={ authorized }
-                                                    getComponent={ getComponent }
-                                                    onChange={ this.onAuthChange } />                    
-                    break
-                  case "basic": authEl = <BasicAuth key={ name }
-                                                  schema={ schema }
-                                                  name={ name }
-                                                  errSelectors={ errSelectors }
-                                                  authorized={ authorized }
-                                                  getComponent={ getComponent }
-                                                  onChange={ this.onAuthChange } />
-                    break
-                  default: authEl = <div key={ name }>Unknown security definition type { type }</div>
-                }
-
-                return (<div key={`${name}-jump`}>
-                  { authEl }
-                </div>)
-
+              nonOauthDefinitions.map( (schema, name) => {                
+                return <AuthItem
+                  key={name}
+                  schema={schema}
+                  name={name}
+                  getComponent={getComponent}
+                  onAuthChange={this.onAuthChange}
+                  authorized={authorized}
+                  errSelectors={errSelectors}
+                  />
               }).toArray()
             }
             <div className="auth-btn-wrapper">
