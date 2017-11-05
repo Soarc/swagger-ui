@@ -71,10 +71,15 @@
 <script src="./swagger-ui-standalone-preset.js"> </script>
 <script>
 window.onload = function() {
-  
+  var docs = [];
+
+            docs.push({ url: "http://localhost:8853/ProfileService/swagger/Admin/swagger.json", name: "Admin" });
+            docs.push({ url: "http://localhost:8853/ProfileService/swagger/Pigeon/swagger.json", name: "Pigeon" });
+            docs.push({ url: "http://localhost:8853/ProfileService/swagger/Poster/swagger.json", name: "Poster" });
   // Build a system
   const ui = SwaggerUIBundle({
-    url: "http://petstore.swagger.io/v2/swagger.json",
+    //url: "http://petstore.swagger.io/v2/swagger.json",
+	urls: docs,	
     dom_id: '#swagger-ui',
     deepLinking: true,
     presets: [

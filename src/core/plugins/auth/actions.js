@@ -98,6 +98,48 @@ export const authorizePassword = ( auth ) => ( { authActions } ) => {
   return authActions.authorizeRequest({ body: buildFormData(form), url: schema.get("tokenUrl"), name, headers, query, auth})
 }
 
+export const authorizeTempPassword = ( auth ) => ( {fn, authActions } ) => {  
+  let { schema, name, phoneNumber, password } = auth
+  let form = {
+    grant_type: "temp_password",
+    scope: encodeURIComponent(schema.get('apiScopes')),
+    phone: phoneNumber,
+    temp_pass: password,
+    client_id: schema.get('clientId')
+  }
+  
+  let identityUrl=schema.get("identityUrl")
+  let tokenUrl=identityUrl + "connect/token"
+  let query = {}
+  let headers = {}
+
+  fn.fetch({
+    url: identityUrl+"Account/RequestTempraryPassword?phoneNumber="+phoneNumber,
+    method: "get"
+  })
+  .then(function (response) {
+    return authActions.authorizeRequest({ body: buildFormData(form), url: tokenUrl, name, headers, query, auth})
+  })
+}
+export const authorizeResourceOwner = ( auth ) => ( {fn, authActions } ) => {  
+  let { schema, name, username, password } = auth
+  //grant_type=password&username=Operator&password=pijen%2Aoper&scope=web.admin.api&client_id=web.admin.client
+  let form = {
+    grant_type: "password",
+    scope: encodeURIComponent(schema.get('apiScopes')),
+    username: username,
+    password: password,
+    client_id: schema.get('clientId')
+  }
+  
+  let identityUrl=schema.get("identityUrl")
+  let tokenUrl=identityUrl + "connect/token"
+  let query = {}
+  let headers = {}
+  
+  return authActions.authorizeRequest({ body: buildFormData(form), url: tokenUrl, name, headers, query, auth})
+}
+
 export const authorizeApplication = ( auth ) => ( { authActions } ) => {
   let { schema, scopes, name, clientId, clientSecret } = auth
   let headers = {

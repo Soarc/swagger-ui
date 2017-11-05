@@ -31,7 +31,7 @@ export default class Operations extends React.Component {
       getConfigs,
       fn
     } = this.props
-
+ 
     let taggedOps = specSelectors.taggedOperations()
 
     const Operation = getComponent("operation")

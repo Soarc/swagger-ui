@@ -47,7 +47,6 @@ export default class Oauth2 extends React.Component {
     let { authActions, errActions, getConfigs, authSelectors } = this.props
     let configs = getConfigs()
     let authConfigs = authSelectors.getConfigs()
-
     errActions.clear({authId: name,type: "auth", source: "auth"})
     oauth2Authorize({auth: this.state, authActions, errActions, configs, authConfigs })
   }

@@ -25,15 +25,13 @@ export default class ApiKeyAuth extends React.Component {
 
   getValue () {
     let { name, authorized } = this.props
-
-    return authorized && authorized.getIn([name, "value"])
+    return authorized && authorized.getIn([name, "value"])//authorized && authorized.getIn([name, "value"])
   }
 
   onChange =(e) => {
     let { onChange } = this.props
     let value = e.target.value
     let newState = Object.assign({}, this.state, { value: value })
-
     this.setState(newState)
     onChange(newState)
   }

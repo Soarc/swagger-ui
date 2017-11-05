@@ -25,7 +25,6 @@ export default class Auths extends React.Component {
 
   submitAuth =(e) => {
     e.preventDefault()
-
     let { authActions } = this.props
 
     authActions.authorize(this.state)
@@ -45,8 +44,11 @@ export default class Auths extends React.Component {
   render() {
     let { definitions, getComponent, authSelectors, errSelectors } = this.props
     const ApiKeyAuth = getComponent("apiKeyAuth")
+    const TempPassAuth = getComponent("tempPassAuth")
     const BasicAuth = getComponent("basicAuth")
     const Oauth2 = getComponent("oauth2", true)
+    const TempPassword = getComponent("tempPassword", true)
+    const ResourceOwner = getComponent("resourceOwner", true)
     const Button = getComponent("Button")
 
     let authorized = authSelectors.authorized()
@@ -56,7 +58,9 @@ export default class Auths extends React.Component {
     })
 
     let nonOauthDefinitions = definitions.filter( schema => schema.get("type") !== "oauth2")
-    let oauthDefinitions = definitions.filter( schema => schema.get("type") === "oauth2")
+    let oauthDefinitions = definitions.filter( schema => schema.get("type") === "oauth2" && (schema.get("flow")!=="temp_password" && schema.get("flow")!=="resource_owner"))
+    let tempPassDefinitions = definitions.filter( schema => schema.get("type") === "oauth2" && schema.get("flow") === "temp_password")
+    let resourceOwnerDefinitions = definitions.filter( schema => schema.get("type") === "oauth2" && schema.get("flow") === "resource_owner")
 
     return (
       <div className="auth-container">
@@ -74,7 +78,7 @@ export default class Auths extends React.Component {
                                                     errSelectors={ errSelectors }
                                                     authorized={ authorized }
                                                     getComponent={ getComponent }
-                                                    onChange={ this.onAuthChange } />
+                                                    onChange={ this.onAuthChange } />                    
                     break
                   case "basic": authEl = <BasicAuth key={ name }
                                                   schema={ schema }
@@ -109,10 +113,42 @@ export default class Auths extends React.Component {
             <p>API requires the following scopes. Select which ones you want to grant to Swagger UI.</p>
           </div>
             {
-              definitions.filter( schema => schema.get("type") === "oauth2")
+              oauthDefinitions
                 .map( (schema, name) =>{
                   return (<div key={ name }>
                     <Oauth2 authorized={ authorized }
+                            schema={ schema }
+                            name={ name } />
+                  </div>)
+                }
+                ).toArray()
+            }
+          </div> : null
+        }
+
+        {
+          tempPassDefinitions && tempPassDefinitions.size ? <div>
+            {
+              tempPassDefinitions
+                .map( (schema, name) =>{
+                  return (<div key={ name }>
+                    <TempPassword authorized={ authorized }
+                            schema={ schema }
+                            name={ name } />
+                  </div>)
+                }
+                ).toArray()
+            }
+          </div> : null
+        }
+
+        {
+          resourceOwnerDefinitions && resourceOwnerDefinitions.size ? <div>
+            {
+              resourceOwnerDefinitions
+                .map( (schema, name) =>{
+                  return (<div key={ name }>
+                    <ResourceOwner authorized={ authorized }
                             schema={ schema }
                             name={ name } />
                   </div>)

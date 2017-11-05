@@ -5,7 +5,6 @@ import ImPropTypes from "react-immutable-proptypes"
 export default class AuthorizeOperationBtn extends React.Component {
   onClick =(e) => {
     e.stopPropagation()
-
     let { security, authActions, authSelectors } = this.props
     let definitions = authSelectors.getDefinitionsByNames(security)
 
@@ -16,7 +15,6 @@ export default class AuthorizeOperationBtn extends React.Component {
     let { security, authSelectors } = this.props
 
     let isAuthorized = authSelectors.isAuthorized(security)
-
     if(isAuthorized === null) {
       return null
     }

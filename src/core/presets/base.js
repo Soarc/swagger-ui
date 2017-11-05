@@ -21,6 +21,8 @@ import AuthError from "core/components/auth/error"
 import ApiKeyAuth from "core/components/auth/api-key-auth"
 import BasicAuth from "core/components/auth/basic-auth"
 import Oauth2 from "core/components/auth/oauth2"
+import TempPassword from "core/components/auth/temp-pass"
+import ResourceOwner from "core/components/auth/resource-owner"
 import Clear from "core/components/clear"
 import LiveResponse from "core/components/live-response"
 import OnlineValidatorBadge from "core/components/online-validator-badge"
@@ -73,6 +75,8 @@ export default function() {
       authError: AuthError,
       oauth2: Oauth2,
       apiKeyAuth: ApiKeyAuth,
+      tempPassword: TempPassword,
+      resourceOwner: ResourceOwner,
       basicAuth: BasicAuth,
       clear: Clear,
       liveResponse: LiveResponse,
